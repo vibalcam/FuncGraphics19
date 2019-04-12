@@ -1,0 +1,22 @@
+a^b            // equivalente a pow(a,b)
+abs(a)         // valor absoluto de a
+acos(a)        // arco coseno de a
+asin(a)        // arco seno de a
+atan(a)        // arco tangente de a
+atan2(a,b)     // arco tangente de a/b
+ceil(a)        // entero más cercano y mayor que a
+cos(a)         // coseno de a
+E              // número e
+exp(a)         // exponencial de a (pow(E,a))
+floor(a)       // entero más cercano y menor que a
+log(a)         // log de a en base e (logaritmo neperiano de a)
+max(a,b)       // máximo de a y b
+min(a,b)       // mínimo de a y b
+PI             // número pi
+pow(a,b)       // a elevado a b
+random()       // número pseudoaleatorio entre 0 y 1
+round(a)       // entero más cercano a a
+sin(a)         // seno de a
+sqrt(a)        // raíz cuadrada de a
+tan(a)         // tangente de a
+Tenga en cuenta que las funciones trigonométricas asumen que el argumento esta en radianes, no en grados.
