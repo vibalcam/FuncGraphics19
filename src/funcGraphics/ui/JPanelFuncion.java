@@ -19,8 +19,8 @@ class JPanelFuncion extends JPanel { //implements KeyListener {
 //	private static final Color COLOR_BTN_DESACTIVADO = new Color(255,124,124);
 	private static final String MSG_BTN_OCULTAR = "Ocultar";
 	private static final String MSG_BTN_MOSTRAR = "Mostrar";
-	private static final String MSG_CALCULANDO = "Calculando...";
-	private static final String MSG_FUNCION_ERROR = "Funcion no valida";
+//	private static final String MSG_CALCULANDO = "Calculando...";
+//	private static final String MSG_FUNCION_ERROR = "Funcion no valida";
 	
 	private static final ImageIcon IMAGEN_OK = new ImageIcon(JPanelFuncion.class.getResource("/ok.png"));
 	private static final ImageIcon IMAGEN_ERROR = new ImageIcon(JPanelFuncion.class.getResource("/error.png"));
@@ -40,24 +40,20 @@ class JPanelFuncion extends JPanel { //implements KeyListener {
 	 * @param ventana JVentanaGraficar que lo contiene
 	 */
 	public JPanelFuncion(JVentanaGraficar ventana) {
-		super(new FlowLayout());
-//		this.addFocusListener(new FocusAdapter() {
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//				txtFunc.requestFocus();
-//			}
-//		});
+		this(ventana,new Funcion(ventana.getGrafica(), VARIABLE, VARIABLE, DEFAULT_MOSTRADO));
 		
-		this.ventana = ventana;
-		funcion = new Funcion(ventana.getGrafica(), VARIABLE, VARIABLE, DEFAULT_MOSTRADO);
-		try {
-			funcion.updateData();
-		} catch (ScriptException e) {
-			e.printStackTrace();	// no debería suceder
-		}
-		ventana.getGrafica().add(funcion);
-		configInputs();
-		mostrarFuncion(true);
+//		super(new FlowLayout());
+		
+//		this.ventana = ventana;
+//		funcion = new Funcion(ventana.getGrafica(), VARIABLE, VARIABLE, DEFAULT_MOSTRADO);
+//		try {
+//			funcion.updateData();
+//		} catch (ScriptException e) {
+//			e.printStackTrace();	// no debería suceder
+//		}
+//		ventana.getGrafica().add(funcion);
+//		configInputs();
+//		mostrarFuncion(true);
 	}
 	
 	public JPanelFuncion(JVentanaGraficar ventana, Funcion funcion) {
@@ -144,6 +140,7 @@ class JPanelFuncion extends JPanel { //implements KeyListener {
 		funcion.setVisible(mostrar);
 //		ventana.getGraficaPanel().repaint();
 		ventana.getGraficaPanel().notifyDataChange();
+		ventana.setGuardado(false);
 	}
 	
 	/**
@@ -174,6 +171,7 @@ class JPanelFuncion extends JPanel { //implements KeyListener {
 //		ventana.getGraficaPanel().repaint();
 		ventana.getGraficaPanel().notifyDataChange();
 //		lbFeedback.setText("");
+		ventana.setGuardado(false);
 	}
 	
 	private void updateFuncionInfo(Exception e) {

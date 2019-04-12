@@ -56,6 +56,7 @@ class JTextFieldLimites extends JFormattedTextField {
 			ventana.getGraficaPanel().repaint();
 			System.out.println(getValue());
 			System.out.println(this.getFormatter().getClass().getName());
+			ventana.setGuardado(false);
 		});
 	}
 	

@@ -64,6 +64,7 @@ public class JVentanaGraficar extends JFrame {
 	private ParallelGroup hGroup;
 	private SequentialGroup vGroup;
 	private JLabel lbGuardado;
+	private JMenuBarGraficar mnbGraficar;
 
 	public static void main(String[] args) {
 		try {
@@ -93,12 +94,14 @@ public class JVentanaGraficar extends JFrame {
 		this.add(graficaPanel,BorderLayout.CENTER);
 //		grafica.setPreferredSize(800,800);
 
+		configSouth();
 		configInputs();
 		configNorth();
-		configSouth();
 		configPropiedades();
 		
-		this.setJMenuBar(new JMenuBarGraficar(this));
+		mnbGraficar = new JMenuBarGraficar(this);
+		this.setJMenuBar(mnbGraficar);
+		this.setGuardado(false);
 		this.setVisible(true);
 	}
 	
@@ -128,7 +131,7 @@ public class JVentanaGraficar extends JFrame {
 	
 	void openGrafica(Grafica grafica) {
 		this.grafica = grafica;
-		grafica.updateData();
+//		grafica.updateData();
 		graficaPanel.setGrafica(this.grafica);
 		
 		pnInputs.removeAll();
@@ -182,6 +185,7 @@ public class JVentanaGraficar extends JFrame {
 		
 		btnAnadir.addActionListener(event -> {
 			addInput(new JPanelFuncion(this));
+			setGuardado(false);
 		});
 		btnMostrarAll.addActionListener(event -> {
 			for(int k=0; k<pnInputs.getComponentCount(); k++) {
@@ -197,6 +201,7 @@ public class JVentanaGraficar extends JFrame {
 				btnMostrarAll.setText(MSG_BTN_MOSTRAR);
 			}
 			mostrarAllAct = !mostrarAllAct;
+			setGuardado(false);
 		});
 		btnReset.addActionListener(event -> {
 			grafica.clear();
@@ -204,6 +209,7 @@ public class JVentanaGraficar extends JFrame {
 			addInput(new JPanelFuncion(this));
 			pnInputs.revalidate();
 			pnInputs.repaint();
+			setGuardado(false);
 		});
 		
 		addInput(new JPanelFuncion(this));	//creamos un input inicial
@@ -264,17 +270,31 @@ public class JVentanaGraficar extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
-						"¿Estás seguro de que quieres abandonar " + NOMBRE_APP, "Confirmar Exit", JOptionPane.YES_NO_OPTION);
-				if(opSel==JOptionPane.YES_OPTION) {
-					JVentanaGraficar.this.exit();
-				}
-				
 //				int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
-//						"Hay cambios sin guardar.\n¿Desea guardar antes de salir?", "Confirmar Exit " + NOMBRE_APP, JOptionPane.YES_NO_CANCEL_OPTION);
-//				if(opSel==JOptionPane.NO_OPTION) {
+//						"¿Estás seguro de que quieres abandonar " + NOMBRE_APP, "Confirmar Exit", JOptionPane.YES_NO_OPTION);
+//				if(opSel==JOptionPane.YES_OPTION) {
 //					JVentanaGraficar.this.exit();
-//				} else if(opSel==JOptionPane.YES_OPTION)
+//				}
+				
+				if(!guardado) {
+					int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
+							"Hay cambios sin guardar.\n¿Desea guardar antes de salir?", "Confirmar Exit " + NOMBRE_APP, JOptionPane.YES_NO_CANCEL_OPTION);
+					
+					boolean salir = true;
+					if(opSel==JOptionPane.YES_OPTION)
+						salir = mnbGraficar.saveGrafica();
+					else if(opSel==JOptionPane.CANCEL_OPTION)
+						salir = false;
+					
+					if(salir)
+						JVentanaGraficar.this.exit();
+					
+//					if(opSel!=JOptionPane.CANCEL_OPTION) {
+//						if(opSel==JOptionPane.YES_OPTION)
+//							mnbGraficar.saveGrafica();
+//						JVentanaGraficar.this.exit();
+//					}
+				}
 			}
 		});
 	}

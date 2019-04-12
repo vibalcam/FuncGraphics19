@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -35,7 +36,7 @@ class JMenuBarGraficar extends JMenuBar {
 	private static final String MSG_ABOUT = 
 			JVentanaGraficar.NOMBRE_APP + ", realizado para Programación Orientada a Objetos (ICAI)\n" +
 			"Autor: Vicente Balmaseda\n" +
-			"Fecha: 01/04/2019\n\n" +
+			"Fecha: 12/04/2019\n\n" +
 			"Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
 	private static final boolean DEFAULT_CHECKBOX_SELECTED = true;
 	
@@ -103,10 +104,11 @@ class JMenuBarGraficar extends JMenuBar {
 	private void menuArchivo() {
 		// menu archivo
 //		JMenuItem nuevo = new JMenuItem("Nuevo", 'n');
-		JMenuItem miAbrir = new JMenuItem("Abrir", 'a');
+		JMenuItem miAbrir = new JMenuItem("Abrir", KeyEvent.VK_O);
 		miAbrir.addActionListener(event -> openGrafica());
-		JMenuItem miGuardar = new JMenuItem("Guardar", 'g');
-		miGuardar.setAccelerator(KeyStroke.getKeyStroke(Character.valueOf('g'), InputEvent.CTRL_DOWN_MASK));
+		miAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem miGuardar = new JMenuItem("Guardar", KeyEvent.VK_G);
+		miGuardar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		miGuardar.addActionListener(event -> saveGrafica());
 		JMenuItem miGuardarComo = new JMenuItem("Guardar como...");
 		miGuardarComo.addActionListener(event -> saveAsGrafica());
@@ -126,22 +128,25 @@ class JMenuBarGraficar extends JMenuBar {
 	
 	private void menuGrafico() {
 		// menu grafico
-		JMenuItem propiedades = new JMenuItem("Propiedades...",'p');
-		JMenuItem imprimir = new JMenuItem("Imprimir...", 'i');
-		JMenu generar = new JMenu("Generar...");
-		mnGrafico.add(propiedades);
-		mnGrafico.add(imprimir);
+		JMenuItem miPropiedades = new JMenuItem("Propiedades...",KeyEvent.VK_P);
+		miPropiedades.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem miImprimir = new JMenuItem("Imprimir...", KeyEvent.VK_I);
+		miImprimir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
+		JMenu mnExportar = new JMenu("Exportar...");
+		mnExportar.setMnemonic(KeyEvent.VK_E);
+		mnGrafico.add(miPropiedades);
+		mnGrafico.add(miImprimir);
 		mnGrafico.addSeparator();
-		mnGrafico.add(generar);
+		mnGrafico.add(mnExportar);
 		
 		// menu generar
 		JMenuItem guardarPNG = new JMenuItem("PNG");
 		JMenuItem generarCSV = new JMenuItem("CSV");
-		generar.add(guardarPNG);
-		generar.add(generarCSV);
+		mnExportar.add(guardarPNG);
+		mnExportar.add(generarCSV);
 		
-		propiedades.addActionListener(event -> ventana.getGraficaPanel().doEditChartProperties());
-		imprimir.addActionListener(event -> ventana.getGraficaPanel().createChartPrintJob());
+		miPropiedades.addActionListener(event -> ventana.getGraficaPanel().doEditChartProperties());
+		miImprimir.addActionListener(event -> ventana.getGraficaPanel().createChartPrintJob());
 		guardarPNG.addActionListener(event -> {
 			try {
 				ventana.getGraficaPanel().doSaveAs();
@@ -157,47 +162,62 @@ class JMenuBarGraficar extends JMenuBar {
 	 * Guardado rápido de la gráfica.
 	 * Si ya ha sido guardada, reemplazará el archivo existente. En caso contrario funcionará como el guardar como.
 	 */
-	void saveGrafica() {
+	boolean saveGrafica() {
 		if(archivo!=null && archivo.exists()) {
-			IOsaveGrafica(archivo);
+			return IOsaveGrafica(archivo);
 		} else
-			saveAsGrafica();
+			return saveAsGrafica();
 	}
 	
 	/**
 	 * Permite elegir al usuario donde guardar la grafica para su posterior recuperación.
 	 */
-	private void saveAsGrafica() {
+	private boolean saveAsGrafica() {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		if(fileChooser.showSaveDialog(ventana)==JFileChooser.APPROVE_OPTION)
-			IOsaveGrafica(fileChooser.getSelectedFile());
+			return IOsaveGrafica(fileChooser.getSelectedFile());
+		else
+			return false;
 	}
 	
 	/**
 	 * Guarda la gráfica en un archivo.
 	 */
-	private void IOsaveGrafica(File destino) {
+	private boolean IOsaveGrafica(File destino) {
 		try {
 //			File destino = fileChooser.getSelectedFile();
 			IOGrafica.saveGrafica(ventana.getGrafica(), destino);
 			archivo = destino;
 			ventana.setGuardado(true);
+			return true;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error Guardar", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
 	private void openGrafica() {
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		if(fileChooser.showOpenDialog(ventana)==JFileChooser.APPROVE_OPTION) {
-			try {
-				File fileTemp = fileChooser.getSelectedFile();
-				ventana.openGrafica(IOGrafica.openGrafica(fileTemp));
-				archivo = fileTemp;
-			} catch (ClassNotFoundException | IOException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error Abrir", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
+		boolean abrir = true;
+		if(!ventana.isGuardado()) {
+			int opSel = JOptionPane.showConfirmDialog(ventana,
+					"Hay cambios sin guardar.\n¿Desea guardar?", "Confirmar Guardar " + JVentanaGraficar.NOMBRE_APP, JOptionPane.YES_NO_OPTION);
+			if(opSel==JOptionPane.YES_OPTION) {
+				abrir = saveGrafica();
+			}
+		}
+		
+		if(abrir) {
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if(fileChooser.showOpenDialog(ventana)==JFileChooser.APPROVE_OPTION) {
+				try {
+					File fileTemp = fileChooser.getSelectedFile();
+					ventana.openGrafica(IOGrafica.openGrafica(fileTemp));
+					archivo = fileTemp;
+				} catch (ClassNotFoundException | IOException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error Abrir", JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
 			}
 		}
 	}
