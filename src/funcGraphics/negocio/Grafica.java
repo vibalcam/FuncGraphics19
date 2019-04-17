@@ -1,7 +1,5 @@
 package funcGraphics.negocio;
 
-import java.io.Serializable;
-
 import javax.script.ScriptException;
 
 import org.jfree.data.xy.XYSeries;
@@ -16,6 +14,7 @@ public class Grafica {
 	private XYSeriesCollection dataCollection;
 	private double leftLimit;
 	private double rightLimit;
+	private boolean guardado = false;
 	
 	/**
 	 * Construye una gráfica con los límites predeterminados
@@ -53,11 +52,28 @@ public class Grafica {
 	}
 	
 	/**
+	 * Devuelve el estado de guardado de la gráfica
+	 * @return true si la gráfica está guardada y actualizada,
+	 * 		   false en caso contrario
+	 */
+	public boolean isGuardado() {
+		return guardado;
+	}
+	
+	/**
 	 * Devuelve los XYSeriesCollection que tienen los datos de la gráfica
 	 * @return XYSeriesCollection con los datos
 	 */
 	public XYSeriesCollection getDataCollection() {
 		return dataCollection;
+	}
+	
+	/**
+	 * Establece el estado de guardado de la gráfica
+	 * @param guardado nuevo estado de guardado
+	 */
+	public void setGuardado(boolean guardado) {
+		this.guardado = guardado;
 	}
 	
 	/**
@@ -139,7 +155,7 @@ public class Grafica {
 	public void updateData() {
 		System.out.println("" + leftLimit + ", " + rightLimit);
 		System.out.println(dataCollection.getSeriesCount());
-		XYSeries serieTemp;
+//		XYSeries serieTemp;
 		for(Object serie : dataCollection.getSeries()) {
 			try {
 				(((FuncionKey) ((XYSeries) serie).getKey())).getFuncion().updateData();

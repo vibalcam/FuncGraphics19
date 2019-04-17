@@ -1,6 +1,4 @@
 package funcGraphics.dominio;
-import java.io.Serializable;
-
 import javax.script.ScriptException;
 
 import org.jfree.data.xy.XYSeries;

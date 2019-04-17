@@ -1,7 +1,5 @@
 package funcGraphics.ui;
 import java.awt.FlowLayout;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -13,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import funcGraphics.dominio.Funcion;
-import funcGraphics.negocio.Grafica;
 
 class JPanelFuncion extends JPanel { //implements KeyListener {
 //	private static final Color COLOR_BTN_DESACTIVADO = new Color(255,124,124);

@@ -3,22 +3,22 @@ package funcGraphics.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.FocusTraversalPolicy;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -26,22 +26,11 @@ import funcGraphics.dominio.Funcion.FuncionKey;
 import funcGraphics.io.IOGrafica;
 import funcGraphics.negocio.Grafica;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 public class JVentanaGraficar extends JFrame {
 	public static final String NOMBRE_APP = "FuncGraphics19";
 	static final Color COLOR_BTN_DESACTIVADO = new Color(255,124,124);
 	private static final int UNIT_INCREMENT_SCROLL_BAR = 10;
-	private static final int FONT_FEEDBACK = 17;
+//	private static final int FONT_FEEDBACK = 17;
 	
 	private static final String MSG_GUARDADO = "Guardado";
 	private static final String MSG_BTN_MOSTRAR = "Mostrar Todo";
@@ -51,14 +40,14 @@ public class JVentanaGraficar extends JFrame {
 	
 	private static String MSG_AYUDA;
 	
-	private boolean guardado = false;	// estado de guardado de la grafica
+//	private boolean guardado = false;	// estado de guardado de la grafica
 	private boolean mostrarAllAct = true;	// true al pulsar modo mostrar, false al pulsar modo ocultar
 	private Grafica grafica;
 	private GraficaPanel graficaPanel;
 	private JTextFieldLimites txtLeftLimit;
 	private JTextFieldLimites txtRightLimit;
 	private JPanel pnInputs;
-	private JLabel lbFeedback;
+//	private JLabel lbFeedback;
 	private JScrollPane scrInputs;
 	private JButton btnAyuda;
 	private ParallelGroup hGroup;
@@ -98,10 +87,11 @@ public class JVentanaGraficar extends JFrame {
 		configInputs();
 		configNorth();
 		configPropiedades();
+		pnInputs.setMinimumSize(pnInputs.getPreferredSize());
 		
 		mnbGraficar = new JMenuBarGraficar(this);
 		this.setJMenuBar(mnbGraficar);
-		this.setGuardado(false);
+		this.setGuardado(true);	// no pregunta si deseas guardar si no has hecho ningún cambio
 		this.setVisible(true);
 	}
 	
@@ -113,9 +103,9 @@ public class JVentanaGraficar extends JFrame {
 		return graficaPanel;
 	}
 	
-	JLabel getLbFeedback() {
-		return lbFeedback;
-	}
+//	JLabel getLbFeedback() {
+//		return lbFeedback;
+//	}
 	
 	JTextFieldLimites getRightTextField() {
 		return txtRightLimit;
@@ -125,9 +115,9 @@ public class JVentanaGraficar extends JFrame {
 		return txtLeftLimit;
 	}
 	
-	boolean isGuardado() {
-		return guardado;
-	}
+//	boolean isGuardado() {
+//		return guardado;
+//	}
 	
 	void openGrafica(Grafica grafica) {
 		this.grafica = grafica;
@@ -148,7 +138,8 @@ public class JVentanaGraficar extends JFrame {
 	}
 	
 	void setGuardado(boolean guardado) {
-		this.guardado = guardado;
+//		this.guardado = guardado;
+		grafica.setGuardado(guardado);
 		if(guardado)
 			lbGuardado.setText(MSG_GUARDADO);
 		else
@@ -159,9 +150,9 @@ public class JVentanaGraficar extends JFrame {
 		JPanel pnNorth = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
 		
 		//mensaje de error
-		lbFeedback = new JLabel();
-		lbFeedback.setFont(new Font(Font.SERIF,Font.BOLD,FONT_FEEDBACK));
-		pnNorth.add(lbFeedback);
+//		lbFeedback = new JLabel();
+//		lbFeedback.setFont(new Font(Font.SERIF,Font.BOLD,FONT_FEEDBACK));
+//		pnNorth.add(lbFeedback);
 		
 		//input intervalo
 		JPanel pnIntervalo = new JPanel(new FlowLayout());
@@ -207,8 +198,8 @@ public class JVentanaGraficar extends JFrame {
 			grafica.clear();
 			pnInputs.removeAll();
 			addInput(new JPanelFuncion(this));
-			pnInputs.revalidate();
-			pnInputs.repaint();
+//			pnInputs.revalidate();
+//			pnInputs.repaint();
 			setGuardado(false);
 		});
 		
@@ -276,18 +267,16 @@ public class JVentanaGraficar extends JFrame {
 //					JVentanaGraficar.this.exit();
 //				}
 				
-				if(!guardado) {
+				boolean salir = true;
+//				if(!guardado) {
+				if(!grafica.isGuardado()) {
 					int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
 							"Hay cambios sin guardar.\n¿Desea guardar antes de salir?", "Confirmar Exit " + NOMBRE_APP, JOptionPane.YES_NO_CANCEL_OPTION);
 					
-					boolean salir = true;
 					if(opSel==JOptionPane.YES_OPTION)
 						salir = mnbGraficar.saveGrafica();
 					else if(opSel==JOptionPane.CANCEL_OPTION)
 						salir = false;
-					
-					if(salir)
-						JVentanaGraficar.this.exit();
 					
 //					if(opSel!=JOptionPane.CANCEL_OPTION) {
 //						if(opSel==JOptionPane.YES_OPTION)
@@ -295,6 +284,8 @@ public class JVentanaGraficar extends JFrame {
 //						JVentanaGraficar.this.exit();
 //					}
 				}
+				if(salir)
+					JVentanaGraficar.this.exit();
 			}
 		});
 	}
@@ -304,18 +295,36 @@ public class JVentanaGraficar extends JFrame {
 		System.exit(0);
 	}
 	
+	/**
+	 * Añade una nueva función de entrada y revalidad el layout
+	 * @param pnFuncion JPanelFuncion del nuevo input
+	 */
 	private void addInput(JPanelFuncion  pnFuncion) {
 //		JPanelFuncion  pnFuncion = new JPanelFuncion(this);
 		
 		hGroup.addComponent(pnFuncion);
 		vGroup.addComponent(pnFuncion,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-		pnInputs.revalidate();
-		pnInputs.repaint();
+		
+		if(pnInputs.getComponentCount()<=1) {
+			this.revalidate();
+			this.repaint();
+		} else {
+			pnInputs.revalidate();
+			pnInputs.repaint();
+		}
+		System.out.println(pnInputs.getComponents());
 	}
 	
 	void eliminarInput(JPanel input) {
 		pnInputs.remove(input);
-		pnInputs.revalidate();
-		pnInputs.repaint();
+//		pnInputs.revalidate();
+//		pnInputs.repaint();
+		if(pnInputs.getComponentCount()==0) {
+			this.revalidate();
+			this.repaint();
+		} else {
+			pnInputs.revalidate();
+			pnInputs.repaint();
+		}
 	}
 }

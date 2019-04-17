@@ -10,10 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Set;
 
 import com.opencsv.CSVWriter;
@@ -24,12 +20,15 @@ import funcGraphics.negocio.Grafica;
 public class IOGrafica {
 	private static String NOMBRE_CARPETA = "FuncGraphicsCSV";
 	private static String NOMBRE_ARCH_CSV = "Funcion%d.csv";
+	public static String EXTENSION = "fgh";
 	
 	/**
-	 * Genera archivos CSV con los datos de las funciones del set
+	 * Genera una carpeta con los archivos CSV que contienen los puntos de las funciones del set
 	 * @param funciones Set que contiene las funciones con los cuales se desea crear archivos CSV
 	 * @param destino File donde se va a crear la carpeta que contendrá los CSV creados
-	 * @throws IOException
+	 * @return true si se ha completado con éxito,
+	 * 		   false si ha habido algun error en el proceso
+	 * @throws IOException si la carpeta ya existe
 	 */
 	public static boolean doSaveAsCSV(Set<Funcion> funciones, File destino) throws IOException {
 		File carpeta = new File(destino, NOMBRE_CARPETA);
@@ -80,9 +79,8 @@ public class IOGrafica {
 	}
 	
 	public static void saveGrafica(Grafica grafica, File destino) throws IOException {
-		System.out.println(destino.getPath());
-		
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(destino))) {
+		File fichero = getFileWithExtension(destino);
+		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fichero))) {
 			GraficaSerializable graficaOut = new GraficaSerializable(grafica);
 			out.writeObject(graficaOut);
 		} catch(IOException e) {
@@ -91,15 +89,46 @@ public class IOGrafica {
 	}
 
 	public static Grafica openGrafica(File origen) throws IOException, ClassNotFoundException {
-		Object graficaSerializable;
-		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(origen))) {
-			graficaSerializable = in.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			throw e;
+		if(!hasAllowedExtension(origen.getName())) 
+			throw new IOException("Fichero con extensión no reconocida");
+		else {
+			Object graficaSerializable;
+			try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(origen))) {
+				graficaSerializable = in.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+				throw e;
+			}
+			if(graficaSerializable instanceof GraficaSerializable)
+				return ((GraficaSerializable) graficaSerializable).getGrafica();
+			else
+				throw new IOException("Error: valor leído no es correcto");
 		}
-		if(graficaSerializable instanceof GraficaSerializable)
-			return ((GraficaSerializable) graficaSerializable).getGrafica();
+	}
+	
+	private static boolean hasAllowedExtension(String path) {
+		int index = path.lastIndexOf('.');
+		return path.substring(index+1).equalsIgnoreCase(EXTENSION);
+	}
+	
+	/**
+	 * Añade la extension adecuada en el caso de que el fichero no la tenga
+	 * @param fichero fichero a añadir extension
+	 * @return fichero con la extension correcta
+	 */
+	private static File getFileWithExtension(File fichero) {
+		String path = fichero.getPath();
+		int index = path.lastIndexOf('.');
+//		if(index!=-1) {
+//			if(!path.substring(index+1).equalsIgnoreCase(EXTENSION))
+//				return new File(path.substring(0, index+1).concat(EXTENSION));
+//			else
+//				return fichero;
+//		} else
+//			return new File(path.concat(EXTENSION));
+		if(index!=-1 && path.substring(index+1).equalsIgnoreCase(EXTENSION))
+			return fichero;
 		else
-			throw new IOException("Error: valor leído no es correcto");
-	}	
+			return new File(path + "." + EXTENSION);
+	}
 }

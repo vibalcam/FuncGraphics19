@@ -1,12 +1,10 @@
 package funcGraphics.dominio;
-import javax.script.ScriptEngineManager;
-
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class Parser {
@@ -73,10 +71,26 @@ public class Parser {
 			exp.setCharAt(pos,',');
 
 			k = pos-1;
-			c = exp.charAt(k);
+//			c = exp.charAt(k);
 			// System.out.println("k: " + k + "\tChar: " + c);
 			count = 0;
-			while(!(isOperador(c) && count<=0) && !(c=='(' && count<=0)) {
+//			while(!(isOperador(c) && count<=0) && !(c=='(' && count<=0)) {
+//				if(c=='(')
+//					count--;
+//				else if(c==')')
+//					count++;
+//
+//				// System.out.println("Count: " + count);
+//				// System.out.println(!(isOperador(c) && count<=0) && count>=0 && k>0);
+//
+//				k--;
+//				if(k>=0)
+//					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
+//				else
+//					break;
+//				// System.out.println("k: " + k + "\tChar: " + c);
+//			}
+			while(k>=0 && !(isOperador(c = exp.charAt(k)) && count<=0) && !(c=='(' && count<=0)) {
 				if(c=='(')
 					count--;
 				else if(c==')')
@@ -86,10 +100,10 @@ public class Parser {
 				// System.out.println(!(isOperador(c) && count<=0) && count>=0 && k>0);
 
 				k--;
-				if(k>=0)
-					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
-				else
-					break;
+//				if(k>=0)
+//					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
+//				else
+//					break;
 				// System.out.println("k: " + k + "\tChar: " + c);
 			}
 			// k = k==0 ? -1 : k;
@@ -97,10 +111,23 @@ public class Parser {
 			pos += 4;
 
 			k = pos+1;
-			c = exp.charAt(k);
+//			c = exp.charAt(k);
 			count = 0;
 			// while(!(isOperador(c) && count<=0) && count>=0 && k<exp.length()) {
-			while(!(isOperador(c) && count<=0) && !(c==')' && count<=0)) {
+//			while(!(isOperador(c) && count<=0) && !(c==')' && count<=0)) {
+//				// System.out.println("k: " + k + "\tChar: " + c + "\tCount: " + count);
+//				if(c==')')
+//					count--;
+//				else if(c=='(')
+//					count++;
+//
+//				k++;
+//				if(k<exp.length())
+//					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
+//				else
+//					break;
+//			}
+			while(k<exp.length() && !(isOperador(c = exp.charAt(k)) && count<=0) && !(c==')' && count<=0)) {
 				// System.out.println("k: " + k + "\tChar: " + c + "\tCount: " + count);
 				if(c==')')
 					count--;
@@ -108,10 +135,10 @@ public class Parser {
 					count++;
 
 				k++;
-				if(k<exp.length())
-					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
-				else
-					break;
+//				if(k<exp.length())
+//					c = exp.charAt(k);	// comprobar que no se ha excedido el rango antes de obtener el charAt
+//				else
+//					break;
 			}
 			// System.out.println("k: " + k);
 			exp.insert(k,")");

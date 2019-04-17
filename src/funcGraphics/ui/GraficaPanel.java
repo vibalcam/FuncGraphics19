@@ -1,16 +1,15 @@
 package funcGraphics.ui;
 
-import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.chart.event.ChartChangeEventType;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 
-import funcGraphics.dominio.Funcion;
 import funcGraphics.dominio.Funcion.FuncionKey;
 import funcGraphics.negocio.Grafica;
 
@@ -21,14 +20,18 @@ class GraficaPanel extends ChartPanel {
 		super(null);
 		this.grafica = grafica;
 		setChart(ChartFactory.createXYLineChart("","x","f(x)",grafica.getDataCollection()));
-		
-		getChart().getXYPlot().setNoDataMessage("NO HAY FUNCIONES AÑADIDAS");
+		configurarPlot();
 	}
 	
 	void setGrafica(Grafica grafica) {
 		this.grafica = grafica;
 		setChart(ChartFactory.createXYLineChart("","x","f(x)",this.grafica.getDataCollection()));
+		configurarPlot();
 		notifyDataChange();
+	}
+	
+	private void configurarPlot() {
+		getChart().getXYPlot().setNoDataMessage("NO HAY FUNCIONES AÑADIDAS");
 	}
 	
 	void notifyDataChange() {

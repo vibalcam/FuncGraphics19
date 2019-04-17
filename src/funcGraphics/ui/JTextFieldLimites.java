@@ -1,20 +1,11 @@
 package funcGraphics.ui;
 
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JFormattedTextField;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;

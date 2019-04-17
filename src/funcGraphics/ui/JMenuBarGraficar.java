@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,14 +22,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import funcGraphics.dominio.Funcion;
 import funcGraphics.dominio.Funcion.FuncionKey;
 import funcGraphics.io.IOGrafica;
-import funcGraphics.negocio.Grafica;
 
 class JMenuBarGraficar extends JMenuBar {
 	private static final String MSG_ABOUT = 
@@ -97,6 +95,9 @@ class JMenuBarGraficar extends JMenuBar {
 					super.approveSelection();
 			}
 		};
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("FuncGraphics files", IOGrafica.EXTENSION);
+		fileChooser.setFileFilter(filter);
+		System.out.println("filefilter: " + fileChooser.getFileFilter());
 		
 //		showGenerarCSV();
 	}
@@ -151,7 +152,10 @@ class JMenuBarGraficar extends JMenuBar {
 			try {
 				ventana.getGraficaPanel().doSaveAs();
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(ventana, e.getMessage(), "Error al guardar PNG", JOptionPane.ERROR_MESSAGE);
+				String mensaje = e.getMessage();
+				if(mensaje==null || mensaje.isBlank())
+					mensaje = "No se pudo completar con éxito la creación del PNG";
+				JOptionPane.showMessageDialog(ventana, mensaje, "Error al guardar PNG", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		});
@@ -191,7 +195,10 @@ class JMenuBarGraficar extends JMenuBar {
 			ventana.setGuardado(true);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Error Guardar", JOptionPane.ERROR_MESSAGE);
+			String mensaje = e.getMessage();
+			if(mensaje==null || mensaje.isBlank())
+				mensaje = "No se pudo guardar con éxito la gráfica";
+			JOptionPane.showMessageDialog(null, mensaje, "Error Guardar", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			return false;
 		}
@@ -199,7 +206,8 @@ class JMenuBarGraficar extends JMenuBar {
 	
 	private void openGrafica() {
 		boolean abrir = true;
-		if(!ventana.isGuardado()) {
+//		if(!ventana.isGuardado()) {
+		if(!ventana.getGrafica().isGuardado()) {
 			int opSel = JOptionPane.showConfirmDialog(ventana,
 					"Hay cambios sin guardar.\n¿Desea guardar?", "Confirmar Guardar " + JVentanaGraficar.NOMBRE_APP, JOptionPane.YES_NO_OPTION);
 			if(opSel==JOptionPane.YES_OPTION) {
@@ -210,12 +218,15 @@ class JMenuBarGraficar extends JMenuBar {
 		if(abrir) {
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			if(fileChooser.showOpenDialog(ventana)==JFileChooser.APPROVE_OPTION) {
+				File fileTemp = fileChooser.getSelectedFile();
 				try {
-					File fileTemp = fileChooser.getSelectedFile();
 					ventana.openGrafica(IOGrafica.openGrafica(fileTemp));
 					archivo = fileTemp;
 				} catch (ClassNotFoundException | IOException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), "Error Abrir", JOptionPane.ERROR_MESSAGE);
+					String mensaje = e.getMessage();
+					if(mensaje==null || mensaje.isBlank())
+						mensaje = "No se pudo abrir con éxito la gráfica desde el archivo " + fileTemp.toString();
+					JOptionPane.showMessageDialog(null, mensaje, "Error Abrir", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 			}
@@ -309,9 +320,14 @@ class JMenuBarGraficar extends JMenuBar {
 					if(fileChooser.showSaveDialog(ventana)==JFileChooser.APPROVE_OPTION) {
 //						System.out.println(fileChooser.getSelectedFile());
 						try {
-							IOGrafica.doSaveAsCSV(funciones, fileChooser.getSelectedFile());
+							if(!IOGrafica.doSaveAsCSV(funciones, fileChooser.getSelectedFile()))
+								JOptionPane.showMessageDialog(ventana, "Algunos ficheros CSV no se pudieron crear",
+										"Warning Crear CSV", JOptionPane.WARNING_MESSAGE);
 						} catch (IOException ioE) {
-							JOptionPane.showMessageDialog(ventana, ioE.getMessage(), "Error Crear CSV", JOptionPane.ERROR_MESSAGE);
+							String mensaje = ioE.getMessage();
+							if(mensaje==null || mensaje.isBlank())
+								mensaje = "No se completo con éxito la creación de los archivos CSV";
+							JOptionPane.showMessageDialog(ventana, mensaje, "Error Crear CSV", JOptionPane.ERROR_MESSAGE);
 							ioE.printStackTrace();
 						}
 					}
