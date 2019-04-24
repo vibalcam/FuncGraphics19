@@ -1,4 +1,5 @@
-La expresión debe usar la variable x (en minúscula)
+* IMPORTANTE: La expresión debe usar la variable x (en minúscula) *
+
 a^b            // equivalente a pow(a,b)
 abs(a)         // valor absoluto de a
 acos(a)        // arco coseno de a

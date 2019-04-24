@@ -31,47 +31,41 @@ import funcGraphics.dominio.Funcion.FuncionKey;
 import funcGraphics.io.IOGrafica;
 
 class JMenuBarGraficar extends JMenuBar {
-	private static final String MSG_ABOUT = 
-			JVentanaGraficar.NOMBRE_APP + ", realizado para Programación Orientada a Objetos (ICAI)\n" +
-			"Autor: Vicente Balmaseda\n" +
-			"Fecha: 12/04/2019\n\n" +
-			"Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
+	private static final String MSG_ABOUT = JVentanaGraficar.NOMBRE_APP
+			+ ", realizado para Programación Orientada a Objetos (ICAI)\n" + "Autor: Vicente Balmaseda\n"
+			+ "Fecha: 23/04/2019\n\n" + "Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
 	private static final boolean DEFAULT_CHECKBOX_SELECTED = true;
-	
+
 	private File archivo;
 	private JVentanaGraficar ventana;
-	
+
 	private JMenu mnArchivo;
 	private JMenu mnGrafico;
-//	private JMenu generar;
 	private JMenu mnAyuda;
 	private JFileChooser fileChooser;
 
 	public JMenuBarGraficar(JVentanaGraficar ventana) {
 		super();
 		this.ventana = ventana;
-		
+
 		// menus
 		mnArchivo = new JMenu("Archivo");
 		mnGrafico = new JMenu("Gráfico");
-//		generar = new JMenu("Generar");
 		mnAyuda = new JMenu("Ayuda");
 		this.add(mnArchivo);
 		this.add(mnGrafico);
-//		this.add(generar);
 		this.add(mnAyuda);
-		
+
 		this.menuArchivo();
 		this.menuGrafico();
-		
+
 		// menu ayuda
 		JMenuItem about = new JMenuItem("About " + JVentanaGraficar.NOMBRE_APP);
 		mnAyuda.add(about);
-		
-		about.addActionListener(event -> 
-			JOptionPane.showMessageDialog(ventana, MSG_ABOUT, "About " + JVentanaGraficar.NOMBRE_APP, JOptionPane.PLAIN_MESSAGE));
-//		INFORMATION_MESSAGE
-		
+
+		about.addActionListener(event -> JOptionPane.showMessageDialog(ventana, MSG_ABOUT,
+				"About " + JVentanaGraficar.NOMBRE_APP, JOptionPane.PLAIN_MESSAGE));
+
 		// File Chooser
 		fileChooser = new JFileChooser() {
 			public void approveSelection() {
@@ -79,15 +73,16 @@ class JMenuBarGraficar extends JMenuBar {
 				int type = this.getDialogType();
 				String mensaje = "";
 				String titulo = "";
-				
-				if(type==JFileChooser.SAVE_DIALOG) {
+
+				if (type == JFileChooser.SAVE_DIALOG) {
 					mensaje = destino.getName() + " ya existe.\n¿Desea reemplazarlo?";
 					titulo = "Confirmar Guardar Como";
-					
+
 					System.out.println(destino.exists());
-					if(this.getFileSelectionMode()==JFileChooser.FILES_ONLY && destino.exists()) {
-						int retOptions = JOptionPane.showConfirmDialog(ventana, mensaje, titulo, JOptionPane.OK_CANCEL_OPTION);
-						if(retOptions==JOptionPane.OK_OPTION)
+					if (this.getFileSelectionMode() == JFileChooser.FILES_ONLY && destino.exists()) {
+						int retOptions = JOptionPane.showConfirmDialog(ventana, mensaje, titulo,
+								JOptionPane.OK_CANCEL_OPTION);
+						if (retOptions == JOptionPane.OK_OPTION)
 							super.approveSelection();
 					} else
 						super.approveSelection();
@@ -95,13 +90,10 @@ class JMenuBarGraficar extends JMenuBar {
 					super.approveSelection();
 			}
 		};
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("FuncGraphics files", IOGrafica.EXTENSION);
-		fileChooser.setFileFilter(filter);
-		System.out.println("filefilter: " + fileChooser.getFileFilter());
-		
-//		showGenerarCSV();
+
+		fileChooser.setFileFilter(new FileNameExtensionFilter("FuncGraphics files", IOGrafica.EXTENSION));
 	}
-	
+
 	private void menuArchivo() {
 		// menu archivo
 //		JMenuItem nuevo = new JMenuItem("Nuevo", 'n');
@@ -115,7 +107,7 @@ class JMenuBarGraficar extends JMenuBar {
 		miGuardarComo.addActionListener(event -> saveAsGrafica());
 		JMenuItem miCerrar = new JMenuItem("Cerrar");
 		miCerrar.addActionListener(event -> ventana.exit());
-		
+
 //		archivo.add(nuevo);
 		mnArchivo.add(miAbrir);
 		mnArchivo.addSeparator();
@@ -123,13 +115,13 @@ class JMenuBarGraficar extends JMenuBar {
 		mnArchivo.add(miGuardarComo);
 		mnArchivo.addSeparator();
 		mnArchivo.add(miCerrar);
-		
+
 //		nuevo.addActionListener(event -> new JVentanaGraficar());		
 	}
-	
+
 	private void menuGrafico() {
 		// menu grafico
-		JMenuItem miPropiedades = new JMenuItem("Propiedades...",KeyEvent.VK_P);
+		JMenuItem miPropiedades = new JMenuItem("Propiedades...", KeyEvent.VK_P);
 		miPropiedades.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
 		JMenuItem miImprimir = new JMenuItem("Imprimir...", KeyEvent.VK_I);
 		miImprimir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
@@ -139,13 +131,13 @@ class JMenuBarGraficar extends JMenuBar {
 		mnGrafico.add(miImprimir);
 		mnGrafico.addSeparator();
 		mnGrafico.add(mnExportar);
-		
+
 		// menu generar
 		JMenuItem guardarPNG = new JMenuItem("PNG");
 		JMenuItem generarCSV = new JMenuItem("CSV");
 		mnExportar.add(guardarPNG);
 		mnExportar.add(generarCSV);
-		
+
 		miPropiedades.addActionListener(event -> ventana.getGraficaPanel().doEditChartProperties());
 		miImprimir.addActionListener(event -> ventana.getGraficaPanel().createChartPrintJob());
 		guardarPNG.addActionListener(event -> {
@@ -153,78 +145,77 @@ class JMenuBarGraficar extends JMenuBar {
 				ventana.getGraficaPanel().doSaveAs();
 			} catch (IOException e) {
 				String mensaje = e.getMessage();
-				if(mensaje==null || mensaje.isBlank())
+				if (mensaje == null || mensaje.isBlank())
 					mensaje = "No se pudo completar con éxito la creación del PNG";
 				JOptionPane.showMessageDialog(ventana, mensaje, "Error al guardar PNG", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		});
 		generarCSV.addActionListener(event -> showGenerarCSV());
 	}
-	
+
 	/**
-	 * Guardado rápido de la gráfica.
-	 * Si ya ha sido guardada, reemplazará el archivo existente. En caso contrario funcionará como el guardar como.
+	 * Guardado rápido de la gráfica. Si ya ha sido guardada, reemplazará el archivo
+	 * existente. En caso contrario funcionará como el guardar como.
 	 */
 	boolean saveGrafica() {
-		if(archivo!=null && archivo.exists()) {
+		if (archivo != null && archivo.exists()) {
 			return IOsaveGrafica(archivo);
 		} else
 			return saveAsGrafica();
 	}
-	
+
 	/**
-	 * Permite elegir al usuario donde guardar la grafica para su posterior recuperación.
+	 * Permite elegir al usuario donde guardar la grafica para su posterior
+	 * recuperación.
 	 */
 	private boolean saveAsGrafica() {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		if(fileChooser.showSaveDialog(ventana)==JFileChooser.APPROVE_OPTION)
+		if (fileChooser.showSaveDialog(ventana) == JFileChooser.APPROVE_OPTION)
 			return IOsaveGrafica(fileChooser.getSelectedFile());
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Guarda la gráfica en un archivo.
 	 */
 	private boolean IOsaveGrafica(File destino) {
 		try {
-//			File destino = fileChooser.getSelectedFile();
 			IOGrafica.saveGrafica(ventana.getGrafica(), destino);
 			archivo = destino;
 			ventana.setGuardado(true);
 			return true;
 		} catch (IOException e) {
 			String mensaje = e.getMessage();
-			if(mensaje==null || mensaje.isBlank())
+			if (mensaje == null || mensaje.isBlank())
 				mensaje = "No se pudo guardar con éxito la gráfica";
 			JOptionPane.showMessageDialog(null, mensaje, "Error Guardar", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
+
 	private void openGrafica() {
 		boolean abrir = true;
-//		if(!ventana.isGuardado()) {
-		if(!ventana.getGrafica().isGuardado()) {
-			int opSel = JOptionPane.showConfirmDialog(ventana,
-					"Hay cambios sin guardar.\n¿Desea guardar?", "Confirmar Guardar " + JVentanaGraficar.NOMBRE_APP, JOptionPane.YES_NO_OPTION);
-			if(opSel==JOptionPane.YES_OPTION) {
+		if (!ventana.getGrafica().isGuardado()) {
+			int opSel = JOptionPane.showConfirmDialog(ventana, "Hay cambios sin guardar.\n¿Desea guardar?",
+					"Confirmar Guardar " + JVentanaGraficar.NOMBRE_APP, JOptionPane.YES_NO_OPTION);
+			if (opSel == JOptionPane.YES_OPTION) {
 				abrir = saveGrafica();
 			}
 		}
-		
-		if(abrir) {
+
+		if (abrir) {
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(fileChooser.showOpenDialog(ventana)==JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(ventana) == JFileChooser.APPROVE_OPTION) {
 				File fileTemp = fileChooser.getSelectedFile();
 				try {
 					ventana.openGrafica(IOGrafica.openGrafica(fileTemp));
 					archivo = fileTemp;
 				} catch (ClassNotFoundException | IOException e) {
 					String mensaje = e.getMessage();
-					if(mensaje==null || mensaje.isBlank())
+					if (mensaje == null || mensaje.isBlank())
 						mensaje = "No se pudo abrir con éxito la gráfica desde el archivo " + fileTemp.toString();
 					JOptionPane.showMessageDialog(null, mensaje, "Error Abrir", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
@@ -232,27 +223,20 @@ class JMenuBarGraficar extends JMenuBar {
 			}
 		}
 	}
-	
+
 	/**
-	 * Muestra diálogos para elegir que funciones se quieren guardar como archivos CSV y en que carpeta guardarlos.
+	 * Muestra diálogos para elegir que funciones se quieren guardar como archivos
+	 * CSV y en que carpeta guardarlos.
 	 */
 	private void showGenerarCSV() {
-//		// prueba
-//		Funcion funcion = new Funcion(ventana.getGrafica(),"x","x",false);
-//		try {
-//			funcion.updateData();
-//		} catch (IllegalArgumentException | ScriptException e) {
-//			e.printStackTrace();
-//		}
 		XYSeriesCollection dataCollection = ventana.getGrafica().getDataCollection();
 		HashSet<Funcion> funciones = new HashSet<Funcion>();
-		for(int k=0; k<dataCollection.getSeriesCount(); k++) {
+		for (int k = 0; k < dataCollection.getSeriesCount(); k++)
 			funciones.add(((FuncionKey) dataCollection.getSeriesKey(k)).getFuncion());
-			System.out.println(((FuncionKey) dataCollection.getSeriesKey(k)).getFuncion().hashCode());
-		}
-		
-		if(funciones.isEmpty())
-			JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV", JOptionPane.ERROR_MESSAGE);
+
+		if (funciones.isEmpty())
+			JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV",
+					JOptionPane.ERROR_MESSAGE);
 		else {
 			JPanel pnOptions = new JPanel();
 			BoxLayout lyOptions = new BoxLayout(pnOptions, BoxLayout.Y_AXIS);
@@ -262,118 +246,80 @@ class JMenuBarGraficar extends JMenuBar {
 			JButton btnSelectAll = new JButton();
 			pnTitle.add(btnSelectAll);
 			pnOptions.add(pnTitle);
-			
-//			System.out.println(funciones);
-	//		int funcSize = dataCollection.getSeriesCount();
-			
-			
-	//		JPanel pnFunciones = new JPanel(new GridLayout(10, (int) Math.ceil(funcSize/10)));
-	//		CheckBoxFuncion input;
-	//		for(int k=0; k<funcSize; k++) {
-	//			input = new CheckBoxFuncion((Funcion) dataCollection.getSeriesKey(k));
-	//			if(pnFunciones.getComponentZOrder(input)==-1)
-	//				pnFunciones.add(input);
-	//		}
-	//		pnOptions.add(pnFunciones);
-			
-			JPanel pnFunciones = new JPanel(new GridLayout(10, (int) Math.ceil(funciones.size()/10)));
+
+			JPanel pnFunciones = new JPanel(new GridLayout(10, (int) Math.ceil(funciones.size() / 10)));
 			CheckBoxFuncion input;
-			for(Funcion func:funciones) {
+			for (Funcion func : funciones) {
 				input = new CheckBoxFuncion(func);
 				pnFunciones.add(input);
 			}
 			pnOptions.add(pnFunciones);
-			
+
 			btnSelectAll.addActionListener(new ActionListener() {
 				private boolean seleccionarTodos = DEFAULT_CHECKBOX_SELECTED;
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-	//				for(int k=0; k<pnOptions.getComponentCount(); k++)
-	//					 ((JCheckBox) pnFunciones.getComponent(k)).setSelected(seleccionarTodos);
-					for(Component comp:pnFunciones.getComponents())
-						if(comp instanceof JCheckBox)
+					for (Component comp : pnFunciones.getComponents())
+						if (comp instanceof JCheckBox)
 							((JCheckBox) comp).setSelected(seleccionarTodos);
-					
+
 					seleccionarTodos = !seleccionarTodos;
-					if(seleccionarTodos)
+					if (seleccionarTodos)
 						btnSelectAll.setText("Seleccionar Todos");
 					else
 						btnSelectAll.setText("Deseleccionar Todos");
 				}
 			});
-			btnSelectAll.doClick();		// primera pulsación pone el boton en su valor por defecto
-			
-			int retOption = JOptionPane.showConfirmDialog(ventana, pnOptions, "Exportar Funciones", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
-			if(retOption==JOptionPane.OK_OPTION) {
+			btnSelectAll.doClick(); // primera pulsación pone el boton en su valor por defecto
+
+			int retOption = JOptionPane.showConfirmDialog(ventana, pnOptions, "Exportar Funciones",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			if (retOption == JOptionPane.OK_OPTION) {
 				CheckBoxFuncion cbFuncion;
-				for(Component comp:pnFunciones.getComponents()) {
-					if(comp instanceof CheckBoxFuncion) {
+				for (Component comp : pnFunciones.getComponents()) {
+					if (comp instanceof CheckBoxFuncion) {
 						cbFuncion = (CheckBoxFuncion) comp;
-						if(!cbFuncion.isSelected())
+						if (!cbFuncion.isSelected())
 							funciones.remove(cbFuncion.getFuncion());
 					}
 				}
-				
-				if(!funciones.isEmpty()) {
+
+				if (!funciones.isEmpty()) {
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					if(fileChooser.showSaveDialog(ventana)==JFileChooser.APPROVE_OPTION) {
-//						System.out.println(fileChooser.getSelectedFile());
+					if (fileChooser.showSaveDialog(ventana) == JFileChooser.APPROVE_OPTION) {
 						try {
-							if(!IOGrafica.doSaveAsCSV(funciones, fileChooser.getSelectedFile()))
+							if (!IOGrafica.doSaveAsCSV(funciones, fileChooser.getSelectedFile()))
 								JOptionPane.showMessageDialog(ventana, "Algunos ficheros CSV no se pudieron crear",
 										"Warning Crear CSV", JOptionPane.WARNING_MESSAGE);
 						} catch (IOException ioE) {
 							String mensaje = ioE.getMessage();
-							if(mensaje==null || mensaje.isBlank())
+							if (mensaje == null || mensaje.isBlank())
 								mensaje = "No se completo con éxito la creación de los archivos CSV";
-							JOptionPane.showMessageDialog(ventana, mensaje, "Error Crear CSV", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(ventana, mensaje, "Error Crear CSV",
+									JOptionPane.ERROR_MESSAGE);
 							ioE.printStackTrace();
 						}
 					}
 				} else
-					JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV",
+							JOptionPane.ERROR_MESSAGE);
 			}
-	//		System.out.println(CheckBoxFuncion.getFuncionesSet());
-			System.out.println(funciones);
-			
-	//		IO.doSaveAsCSV(funcion,"C://Users//vibal//OneDrive//Escritorio/prueba.csv");
-	//		IO.doSaveAsCSV(funcion,"C:/Users/Vicente/Desktop/prueba.csv");
+			// System.out.println(CheckBoxFuncion.getFuncionesSet());
+//			System.out.println(funciones);
 		}
 	}
-	
+
 	private class CheckBoxFuncion extends JCheckBox {
 		private Funcion funcion;
-		
+
 		private CheckBoxFuncion(Funcion funcion) {
 			super(funcion.getExpresion());
 			this.funcion = funcion;
 		}
-		
+
 		private Funcion getFuncion() {
 			return funcion;
 		}
-		
-//		@Override
-//		public boolean equals(Object obj) {
-//			if(obj instanceof CheckBoxFuncion)
-//				return this.funcion.equalsExpresion(((CheckBoxFuncion) obj).getFuncion());
-//			else
-//				return false;
-//		}
-		
-//		private static Set<Funcion> getFuncionesSet() {
-//			return funciones;
-//		}
-//		
-//		@Override
-//		public void setSelected(boolean selected) {
-//			System.out.println("corre");
-//			if(selected)
-//				funciones.add(funcion);
-//			else
-//				funciones.remove(funcion);
-//			super.setSelected(selected);
-//		}
 	}
 }
