@@ -32,7 +32,7 @@ public class Parser {
 	public void setFuncion(String expresion, String variable) {
 		String expStrip = expresion.strip();
 		expresion = expStrip.isEmpty() ? "0" : expStrip;
-		if (this.variable != null)
+		if(this.variable != null)
 			bindings.remove(this.variable);
 		this.variable = variable;
 		parse(expresion);
