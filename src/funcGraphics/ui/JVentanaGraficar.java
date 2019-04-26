@@ -261,7 +261,7 @@ public class JVentanaGraficar extends JFrame {
 
 					if (opSel == JOptionPane.YES_OPTION)
 						salir = mnbGraficar.saveGrafica();
-					else if (opSel == JOptionPane.CANCEL_OPTION)
+					else if (opSel == JOptionPane.CANCEL_OPTION || opSel== JOptionPane.CLOSED_OPTION)
 						salir = false;
 				}
 				if (salir)

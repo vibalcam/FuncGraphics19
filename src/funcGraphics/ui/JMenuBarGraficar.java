@@ -33,7 +33,7 @@ import funcGraphics.io.IOGrafica;
 class JMenuBarGraficar extends JMenuBar {
 	private static final String MSG_ABOUT = JVentanaGraficar.NOMBRE_APP
 			+ ", realizado para Programación Orientada a Objetos (ICAI)\n" + "Autor: Vicente Balmaseda\n"
-			+ "Fecha: 23/04/2019\n\n" + "Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
+			+ "Fecha: 26/04/2019\n\n" + "Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
 	private static final boolean DEFAULT_CHECKBOX_SELECTED = true;
 
 	private File archivo;
@@ -71,16 +71,12 @@ class JMenuBarGraficar extends JMenuBar {
 			public void approveSelection() {
 				File destino = getSelectedFile();
 				int type = this.getDialogType();
-				String mensaje = "";
-				String titulo = "";
 
 				if (type == JFileChooser.SAVE_DIALOG) {
-					mensaje = destino.getName() + " ya existe.\n¿Desea reemplazarlo?";
-					titulo = "Confirmar Guardar Como";
-
-					System.out.println(destino.exists());
+//					System.out.println(destino.exists());
 					if (this.getFileSelectionMode() == JFileChooser.FILES_ONLY && destino.exists()) {
-						int retOptions = JOptionPane.showConfirmDialog(ventana, mensaje, titulo,
+						String mensaje = destino.getName() + " ya existe.\n¿Desea reemplazarlo?";
+						int retOptions = JOptionPane.showConfirmDialog(ventana, mensaje, "Confirmar Guardar Como",
 								JOptionPane.OK_CANCEL_OPTION);
 						if (retOptions == JOptionPane.OK_OPTION)
 							super.approveSelection();
@@ -305,7 +301,6 @@ class JMenuBarGraficar extends JMenuBar {
 					JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV",
 							JOptionPane.ERROR_MESSAGE);
 			}
-			// System.out.println(CheckBoxFuncion.getFuncionesSet());
 //			System.out.println(funciones);
 		}
 	}

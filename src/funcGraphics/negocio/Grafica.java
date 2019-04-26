@@ -114,33 +114,6 @@ public class Grafica {
 		}
 	}
 
-//	/**
-//	 * Cambia los límites de la gráfica. En el caso de que el límite izquierdo sea mayor que el derecho,
-//	 * se establece ambos límites iguales al límite derecho
-//	 * @param leftLimit límite izquierdo
-//	 * @param rightLimit límite derecho
-//	 * @return true si y solo si ha sido el lñimite izquierdo es menor que el derecho
-//	 */
-//	public boolean setLimites(double leftLimit, double rightLimit) {
-//		boolean exito;
-//		if(this.leftLimit==leftLimit && this.rightLimit==rightLimit) {
-//			exito = true;
-//		} else {
-//			this.rightLimit = rightLimit;
-//			if(leftLimit>rightLimit) {
-//				this.leftLimit = rightLimit;
-//				exito = false;
-//			} else {
-//				this.leftLimit = leftLimit;
-//				exito = true;
-//			}
-//		
-//			updateData();
-//		}
-//		
-//		return exito;
-//	}
-
 	/**
 	 * Cambia los límites de la gráfica
 	 * 
@@ -152,8 +125,7 @@ public class Grafica {
 	public void setLimites(double leftLimit, double rightLimit) throws IllegalArgumentException {
 		if (leftLimit > rightLimit)
 			throw new IllegalArgumentException("Límite izquierdo no puede ser superior al derecho");
-		else if (this.leftLimit != leftLimit || this.rightLimit != rightLimit) { // si son iguales evitamos tener que
-																					// actualizar los datos
+		else if (this.leftLimit != leftLimit || this.rightLimit != rightLimit) { // si son iguales evitamos actualizar los datos
 			this.leftLimit = leftLimit;
 			this.rightLimit = rightLimit;
 			updateData();

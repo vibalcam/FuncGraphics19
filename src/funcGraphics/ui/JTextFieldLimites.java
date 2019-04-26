@@ -32,21 +32,50 @@ class JTextFieldLimites extends JFormattedTextField {
 
 		// actualiza la gráfica cuando hay un cambio en el valor de los intervalos
 		this.addPropertyChangeListener("value", event -> {
-			Grafica grafica = ventana.getGrafica();
-			if (lLimit) { // si es el límite izquierdo
-				grafica.setLeftLimit(getDoubleValue());
-				ventana.getRightTextField().setValue(Double.valueOf(grafica.getRightLimit()));
-			} else { // si es el límite derecho
-				grafica.setRightLimit(getDoubleValue());
-				ventana.getLeftTextField().setValue(Double.valueOf(grafica.getLeftLimit()));
+//			System.out.println(event.getOldValue() + "->" + event.getNewValue());
+//			System.out.println(((Number)event.getNewValue()).doubleValue()==((Number)event.getOldValue()).doubleValue());
+			if(((Number)event.getNewValue()).doubleValue()!=((Number)event.getOldValue()).doubleValue()) {
+				Grafica grafica = ventana.getGrafica();
+				if (lLimit) { // si es el límite izquierdo
+//					System.out.println("pruebaL");
+					grafica.setLeftLimit(getDoubleValue());
+					// actualizar el otro límite si este ha cambiado
+					ventana.getRightTextField().setValue(Double.valueOf(grafica.getRightLimit()));
+				} else { // si es el límite derecho
+//					System.out.println("pruebaR");
+					grafica.setRightLimit(getDoubleValue());
+					// actualizar el otro límite si este ha cambiado
+					ventana.getLeftTextField().setValue(Double.valueOf(grafica.getLeftLimit()));
+				}
+				ventana.getGraficaPanel().notifyDataChange();
+				ventana.setGuardado(false);
 			}
-			ventana.getGraficaPanel().notifyDataChange();
-			ventana.setGuardado(false);
 		});
+		
+//		this.addPropertyChangeListener("value", event -> {
+//			Grafica grafica = ventana.getGrafica();
+//			double newValue;
+//			JTextFieldLimites otroLimite;
+//			if (lLimit) { // si es el límite izquierdo
+//				System.out.println("pruebaL");
+//				grafica.setLeftLimit(getDoubleValue());
+//				// actualizar el otro límite si este ha cambiado
+//				if((otroLimite = ventana.getRightTextField()).getDoubleValue()!=(newValue = grafica.getRightLimit()))
+//					otroLimite.setValue(Double.valueOf(newValue));
+//			} else { // si es el límite derecho
+//				System.out.println("pruebaR");
+//				grafica.setRightLimit(getDoubleValue());
+//				// actualizar el otro límite si este ha cambiado
+//				if((otroLimite = ventana.getLeftTextField()).getDoubleValue()!=(newValue = grafica.getLeftLimit()))
+//					otroLimite.setValue(Double.valueOf(newValue));
+//			}
+//			ventana.getGraficaPanel().notifyDataChange();
+//			ventana.setGuardado(false);
+//		});
 	}
 
 	public double getDoubleValue() {
-		return ((Number) super.getValue()).doubleValue();
+		return ((Number) this.getValue()).doubleValue();
 	}
 
 	class LimitesFormatter extends NumberFormatter {

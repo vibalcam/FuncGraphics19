@@ -106,7 +106,7 @@ public class Parser {
 			}
 		}
 
-		System.out.println(exp.toString());
+//		System.out.println(exp.toString());
 		this.parsed = exp.toString();
 	}
 

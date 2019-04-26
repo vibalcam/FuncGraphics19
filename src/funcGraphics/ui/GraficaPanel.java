@@ -22,7 +22,6 @@ class GraficaPanel extends ChartPanel {
 
 	/**
 	 * Establece la gráfica del panel
-	 * 
 	 * @param grafica nueva gráfica del panel
 	 */
 	void setGrafica(Grafica grafica) {
