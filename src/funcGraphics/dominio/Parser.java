@@ -43,7 +43,7 @@ public class Parser {
 	}
 
 	public double eval(double value) throws ScriptException {
-		if (!variable.isBlank())
+		if (variable!=null && !variable.isBlank())
 			bindings.put(variable, value);
 		Object res = ENGINE.eval(parsed, bindings);
 		if (res == null)

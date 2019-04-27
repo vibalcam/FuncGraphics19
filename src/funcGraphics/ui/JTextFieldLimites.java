@@ -3,6 +3,7 @@ package funcGraphics.ui;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.regex.Pattern;
 
 import javax.swing.JFormattedTextField;
@@ -15,9 +16,11 @@ import funcGraphics.negocio.Grafica;
 
 class JTextFieldLimites extends JFormattedTextField {
 	private static final int MAX_FRACTION_DIGITS = 4;
+	private JVentanaGraficar ventana;
 
 	JTextFieldLimites(JVentanaGraficar ventana, double value, int columnas, boolean lLimit) {
 		super();
+		this.ventana = ventana;
 		this.setFormatterFactory(new AbstractFormatterFactory() {
 			private LimitesFormatter formatter = new LimitesFormatter();
 
@@ -37,15 +40,17 @@ class JTextFieldLimites extends JFormattedTextField {
 			if(((Number)event.getNewValue()).doubleValue()!=((Number)event.getOldValue()).doubleValue()) {
 				Grafica grafica = ventana.getGrafica();
 				if (lLimit) { // si es el límite izquierdo
-//					System.out.println("pruebaL");
+					System.out.println("pruebaL");
 					grafica.setLeftLimit(getDoubleValue());
 					// actualizar el otro límite si este ha cambiado
-					ventana.getRightTextField().setValue(Double.valueOf(grafica.getRightLimit()));
+//					ventana.getRightTextField().setValue(Double.valueOf(grafica.getRightLimit()));
+					ventana.getRightTextField().setValue(grafica.getRightLimit());
 				} else { // si es el límite derecho
-//					System.out.println("pruebaR");
+					System.out.println("pruebaR");
 					grafica.setRightLimit(getDoubleValue());
 					// actualizar el otro límite si este ha cambiado
-					ventana.getLeftTextField().setValue(Double.valueOf(grafica.getLeftLimit()));
+//					ventana.getLeftTextField().setValue(Double.valueOf(grafica.getLeftLimit()));
+					ventana.getLeftTextField().setValue(grafica.getLeftLimit());
 				}
 				ventana.getGraficaPanel().notifyDataChange();
 				ventana.setGuardado(false);
@@ -73,9 +78,19 @@ class JTextFieldLimites extends JFormattedTextField {
 //			ventana.setGuardado(false);
 //		});
 	}
+	
+	@Override
+	public void commitEdit() throws ParseException {
+		ventana.getGraficaPanel().restoreAutoBounds();
+		super.commitEdit();
+	}
 
 	public double getDoubleValue() {
 		return ((Number) this.getValue()).doubleValue();
+	}
+	
+	public void setValue(double value) {
+		this.setValue(Double.valueOf(value));
 	}
 
 	class LimitesFormatter extends NumberFormatter {

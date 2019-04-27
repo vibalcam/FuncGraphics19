@@ -11,13 +11,34 @@ import funcGraphics.negocio.Grafica;
  * @author vibal
  */
 public class Funcion {
+	/**
+	 * Número de puntos usados para representar a una Funcion en la Grafica
+	 */
 	private final static int NUM_PUNTOS = 1500;
 
+	/**
+	 * Key asociada a la Funcion
+	 */
 	private FuncionKey key;
+	/**
+	 * Parseador usado por la Funcion para calcular los puntos
+	 */
 	private Parser parser;
+	/**
+	 * Expresión matemática de la Funcion
+	 */
 	private String expresion;
+	/**
+	 * Gráfica a la que pertenece la Funcion y en la que será representada
+	 */
 	private Grafica grafica;
+	/**
+	 * XYSeries con los puntos a representar de la Funcion
+	 */
 	private XYSeries data;
+	/**
+	 * Estado de visibilidad de la Funcion
+	 */
 	private boolean visible;
 
 	/**

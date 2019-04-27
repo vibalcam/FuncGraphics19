@@ -78,7 +78,7 @@ public class JVentanaGraficar extends JFrame {
 		grafica = new Grafica();
 
 		// canvas donde estará la gráfica
-		graficaPanel = new GraficaPanel(grafica);
+		graficaPanel = new GraficaPanel(grafica,this);
 		this.add(graficaPanel, BorderLayout.CENTER);
 //		grafica.setPreferredSize(800,800);
 
@@ -151,8 +151,8 @@ public class JVentanaGraficar extends JFrame {
 		// input intervalo
 		JPanel pnIntervalo = new JPanel(new FlowLayout());
 		pnIntervalo.add(new JLabel("Intervalo: "));
-		txtLeftLimit = new JTextFieldLimites(this, -1 * Grafica.DEFAULT_LIMIT, 5, true);
-		txtRightLimit = new JTextFieldLimites(this, Grafica.DEFAULT_LIMIT, 5, false);
+		txtLeftLimit = new JTextFieldLimites(this, -1 * Grafica.DEFAULT_LIMIT, 7, true);
+		txtRightLimit = new JTextFieldLimites(this, Grafica.DEFAULT_LIMIT, 7, false);
 
 		pnIntervalo.add(txtLeftLimit);
 		pnIntervalo.add(txtRightLimit);
@@ -253,26 +253,27 @@ public class JVentanaGraficar extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				boolean salir = true;
-				if (!grafica.isGuardado()) {
-					int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
-							"Hay cambios sin guardar.\n¿Desea guardar antes de salir?", "Confirmar Exit " + NOMBRE_APP,
-							JOptionPane.YES_NO_CANCEL_OPTION);
-
-					if (opSel == JOptionPane.YES_OPTION)
-						salir = mnbGraficar.saveGrafica();
-					else if (opSel == JOptionPane.CANCEL_OPTION || opSel== JOptionPane.CLOSED_OPTION)
-						salir = false;
-				}
-				if (salir)
-					JVentanaGraficar.this.exit();
+				JVentanaGraficar.this.exit();
 			}
 		});
 	}
 
 	void exit() {
-		this.dispose();
-		System.exit(0);
+		boolean salir = true;
+		if (!grafica.isGuardado()) {
+			int opSel = JOptionPane.showConfirmDialog(JVentanaGraficar.this,
+					"Hay cambios sin guardar.\n¿Desea guardar antes de salir?", "Confirmar Exit " + NOMBRE_APP,
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			if (opSel == JOptionPane.YES_OPTION)
+				salir = mnbGraficar.saveGrafica();
+			else if (opSel == JOptionPane.CANCEL_OPTION || opSel== JOptionPane.CLOSED_OPTION)
+				salir = false;
+		}
+		if (salir) {
+			this.dispose();
+			System.exit(0);
+		}
 	}
 
 	/**

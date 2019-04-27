@@ -1,3 +1,4 @@
 # FuncGraphics19
 Java 2º Final Project
-Graphs whatever function you write
+Grafica cualquier funci?n de una variable
+Fecha: 27/04/2019
