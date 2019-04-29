@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"funcGraphics.dominio"},{"l":"funcGraphics.io"},{"l":"funcGraphics.negocio"},{"l":"funcGraphics.ui"}]

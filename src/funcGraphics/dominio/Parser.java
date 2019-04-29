@@ -58,11 +58,9 @@ public class Parser {
 		StringBuilder exp = new StringBuilder(expresion);
 
 		char c;
-//		int pos = exp.indexOf("^");
 		int pos = -1;
 		int k;
 		int count;
-//		while(pos!=-1) {
 		while ((pos = exp.indexOf("^", pos + 1)) != -1) {
 			exp.setCharAt(pos, ',');
 
@@ -90,8 +88,6 @@ public class Parser {
 			}
 			exp.insert(k, ")");
 			pos += 1;
-
-//			pos = exp.indexOf("^",pos+1);
 		}
 
 		Matcher m = PATTERN.matcher(exp.toString());
@@ -106,7 +102,6 @@ public class Parser {
 			}
 		}
 
-//		System.out.println(exp.toString());
 		this.parsed = exp.toString();
 	}
 

@@ -62,9 +62,6 @@ class GraficaPanel extends ChartPanel {
 	
 	private void changeLimites() {
 		Range range = getChart().getXYPlot().getDomainAxis().getRange();
-		System.out.println(range.toString());
-//		grafica.setLimites(range.getLowerBound(), range.getUpperBound());
-//		notifyDataChange();
 		ventana.getRightTextField().setValue(range.getUpperBound());
 		ventana.getLeftTextField().setValue(range.getLowerBound());
 	}
@@ -74,12 +71,6 @@ class GraficaPanel extends ChartPanel {
 		super.zoom(selection);
 		changeLimites();
 	}
-	
-//	@Override
-//	public void zoomInBoth(double x, double y) {
-//		super.zoomInBoth(x, y);
-//		changeLimites();
-//	}
 	
 	@Override
 	public void zoomInDomain(double x, double y) {
@@ -92,12 +83,6 @@ class GraficaPanel extends ChartPanel {
 		super.zoomInRange(x, y);
 		changeLimites();
 	}
-	
-//	@Override
-//	public void zoomOutBoth(double x, double y) {
-//		super.zoomOutBoth(x, y);
-//		changeLimites();
-//	}
 	
 	@Override
 	public void zoomOutDomain(double x, double y) {

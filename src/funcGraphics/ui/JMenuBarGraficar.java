@@ -33,7 +33,7 @@ import funcGraphics.io.IOGrafica;
 class JMenuBarGraficar extends JMenuBar {
 	private static final String MSG_ABOUT = JVentanaGraficar.NOMBRE_APP
 			+ ", realizado para Programación Orientada a Objetos (ICAI)\n" + "Autor: Vicente Balmaseda\n"
-			+ "Fecha: 26/04/2019\n\n" + "Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
+			+ "Fecha: 29/04/2019\n\n" + "Se ha hecho uso de las librerías open source JFreeChart y Opencsv.";
 	private static final boolean DEFAULT_CHECKBOX_SELECTED = true;
 
 	private File archivo;
@@ -73,7 +73,6 @@ class JMenuBarGraficar extends JMenuBar {
 				int type = this.getDialogType();
 
 				if (type == JFileChooser.SAVE_DIALOG) {
-//					System.out.println(destino.exists());
 					if (this.getFileSelectionMode() == JFileChooser.FILES_ONLY && destino.exists()) {
 						String mensaje = destino.getName() + " ya existe.\n¿Desea reemplazarlo?";
 						int retOptions = JOptionPane.showConfirmDialog(ventana, mensaje, "Confirmar Guardar Como",
@@ -112,7 +111,7 @@ class JMenuBarGraficar extends JMenuBar {
 		mnArchivo.addSeparator();
 		mnArchivo.add(miCerrar);
 
-//		nuevo.addActionListener(event -> new JVentanaGraficar());		
+//		nuevo.addActionListener(event -> new JVentanaGraficar());	
 	}
 
 	private void menuGrafico() {
@@ -153,6 +152,7 @@ class JMenuBarGraficar extends JMenuBar {
 	/**
 	 * Guardado rápido de la gráfica. Si ya ha sido guardada, reemplazará el archivo
 	 * existente. En caso contrario funcionará como el guardar como.
+	 * @return true si se ha llevado a cabo el guardado con éxito
 	 */
 	boolean saveGrafica() {
 		if (archivo != null && archivo.exists()) {
@@ -164,6 +164,7 @@ class JMenuBarGraficar extends JMenuBar {
 	/**
 	 * Permite elegir al usuario donde guardar la grafica para su posterior
 	 * recuperación.
+	 * @return true si se ha llevado a cabo el guardado con éxito
 	 */
 	private boolean saveAsGrafica() {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -175,6 +176,8 @@ class JMenuBarGraficar extends JMenuBar {
 
 	/**
 	 * Guarda la gráfica en un archivo.
+	 * @param destino File donde se va a guardar
+	 * @return true si se ha llevado a cabo el guardado con éxito
 	 */
 	private boolean IOsaveGrafica(File destino) {
 		try {
@@ -187,7 +190,7 @@ class JMenuBarGraficar extends JMenuBar {
 			if (mensaje == null || mensaje.isBlank())
 				mensaje = "No se pudo guardar con éxito la gráfica";
 			JOptionPane.showMessageDialog(null, mensaje, "Error Guardar", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
+//			e.printStackTrace();
 			return false;
 		}
 	}
@@ -214,7 +217,7 @@ class JMenuBarGraficar extends JMenuBar {
 					if (mensaje == null || mensaje.isBlank())
 						mensaje = "No se pudo abrir con éxito la gráfica desde el archivo " + fileTemp.toString();
 					JOptionPane.showMessageDialog(null, mensaje, "Error Abrir", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
+//					e.printStackTrace();
 				}
 			}
 		}
@@ -294,14 +297,13 @@ class JMenuBarGraficar extends JMenuBar {
 								mensaje = "No se completo con éxito la creación de los archivos CSV";
 							JOptionPane.showMessageDialog(ventana, mensaje, "Error Crear CSV",
 									JOptionPane.ERROR_MESSAGE);
-							ioE.printStackTrace();
+//							ioE.printStackTrace();
 						}
 					}
 				} else
 					JOptionPane.showMessageDialog(ventana, "No hay funciones añadidas", "Error Crear CSV",
 							JOptionPane.ERROR_MESSAGE);
 			}
-//			System.out.println(funciones);
 		}
 	}
 

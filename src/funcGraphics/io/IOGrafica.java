@@ -67,6 +67,7 @@ public class IOGrafica {
 				writer.writeNext(dataWrite, false);
 			}
 		} catch (IOException e) {
+//			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -88,6 +89,7 @@ public class IOGrafica {
 			GraficaSerializable graficaOut = new GraficaSerializable(grafica);
 			out.writeObject(graficaOut);
 		} catch (IOException e) {
+//			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -100,7 +102,7 @@ public class IOGrafica {
 			try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(origen))) {
 				graficaSerializable = in.readObject();
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 				throw e;
 			}
 			if (graficaSerializable instanceof GraficaSerializable)

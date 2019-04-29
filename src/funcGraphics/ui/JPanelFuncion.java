@@ -41,12 +41,6 @@ class JPanelFuncion extends JPanel {
 
 	public JPanelFuncion(JVentanaGraficar ventana, Funcion funcion) {
 		super(new FlowLayout());
-//		this.addFocusListener(new FocusAdapter() {
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//				txtFunc.requestFocus();
-//			}
-//		});
 
 		this.ventana = ventana;
 		this.funcion = funcion;
@@ -57,7 +51,7 @@ class JPanelFuncion extends JPanel {
 			this.funcion.updateData();
 			updateFuncionInfo(null);
 		} catch (ScriptException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			updateFuncionInfo(e);
 		}
 		mostrarFuncion(this.funcion.isVisible());
@@ -101,14 +95,6 @@ class JPanelFuncion extends JPanel {
 			ventana.getGraficaPanel().notifyDataChange();
 			ventana.eliminarInput(this);
 		});
-
-		// focus se mueve al siguiente input
-//		txtFunc.addFocusListener(new FocusAdapter() {
-//			public void focusLost(FocusEvent e) {
-//				ventana.pnInputs.requestFocus();
-//				ventana.pnInputs.transferFocus();
-//			};
-//		});
 	}
 
 	void mostrarFuncion(boolean mostrar) {

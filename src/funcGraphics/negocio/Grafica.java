@@ -32,8 +32,6 @@ public class Grafica {
 	public Grafica(double leftLimit, double rightLimit) {
 		dataCollection = new XYSeriesCollection();
 		this.setLimites(leftLimit, rightLimit);
-//		this.leftLimit = leftLimit;
-//		this.rightLimit = rightLimit;
 	}
 
 	/**
