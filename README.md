@@ -11,7 +11,7 @@ Los archivos de funcGraphics tienen la extension "fgh".
 
 El guardado se realiza mediante una clase auxiliar (GraficaSerializable).
 
-Se representan 1500 puntos por cada función, esto puede ser cambiado en el archivo Funcion.java
+Se representan 1500 puntos por cada función, esto puede ser cambiado en el archivo Funcion.java.
 A más puntos, mayor calidad, pero más lento va la aplicación.
 
 ## Librerías utilizadas
