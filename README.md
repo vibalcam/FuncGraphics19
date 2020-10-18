@@ -1,4 +1,7 @@
 # FuncGraphics19
+
+![Preview FuncGraphics19](/preview.png)
+
 Plots one variable functions.
 
 Grafica funciones de una variable.
